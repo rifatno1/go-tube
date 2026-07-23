@@ -37,11 +37,11 @@ func handle_bin_download(m *Model) (tea.Model, tea.Cmd) {
 	m.states.progressValue = 0
 	m.errorMessage = fmt.Sprintf("Downloading file \"%s\"", binary)
 	return m, tea.Batch(
-		(&bins_Download{}).trigger(
+		trigger_bins_Download(
 			binary,
 			m.states.dir,
 			m.progressChannel,
 		),
-		(&bins_Download_Progress{}).trigger(m.progressChannel),
+		trigger_bins_Download_Progress(m.progressChannel),
 	)
 }

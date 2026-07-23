@@ -7,8 +7,7 @@ import (
 
 func (m *Model) Init() tea.Cmd {
 	return tea.Batch(
-		// save the directory to the model
-		(&lib_GetDir{}).trigger(),
+		trigger_lib_GetDir(),
 	)
 }
 
