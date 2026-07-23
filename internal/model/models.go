@@ -30,71 +30,110 @@ type states struct {
 	downloading_bin bool
 }
 
-// wrappers and their types
-type lib_GetDir_Res struct {
+type lib_GetDir struct {
 	dir          string
 	errorMessage string
 }
 
-func lib_GetDir_Cmd() tea.Msg {
-	dir, err := lib.GetDir()
-	if err != nil {
-		return lib_GetDir_Res{errorMessage: "Failed to get the directory."}
-	} else {
-		return lib_GetDir_Res{dir: dir}
+func (val *lib_GetDir) trigger() tea.Cmd {
+	return func() tea.Msg {
+		dir, err := lib.GetDir()
+		if err != nil {
+			val.errorMessage = "Failed to get the directory."
+		} else {
+			val.dir = dir
+		}
+		return *val
 	}
 }
 
-type bins_GetPath_Res struct {
+func (msg *lib_GetDir) onchange(m *Model) (tea.Model, tea.Cmd) {
+	m.states.dir = msg.dir
+	if msg.errorMessage != "" {
+		setError(m, "root_dir_error", msg.errorMessage)
+	} else {
+		clearError(m, "root_dir_error")
+	}
+	return m, (&bins_GetPath{}).trigger(m.states.dir)
+}
+
+type bins_GetPath struct {
 	errorMessage string
 	ffmpeg       string
 	ytdlp        string
 }
 
-func bins_GetPath_Cmd(dir string) tea.Cmd {
+func (val *bins_GetPath) trigger(dir string) tea.Cmd {
 	return func() tea.Msg {
 		ffmpegPath, ytdlpPath := bins.GetPath(dir)
-		res := bins_GetPath_Res{
-			ffmpeg: ffmpegPath,
-			ytdlp:  ytdlpPath,
-		}
+		val.ffmpeg = ffmpegPath
+		val.ytdlp = ytdlpPath
 
 		if ytdlpPath == "" {
-			res.errorMessage = "\"yt-dlp.exe\" not found in the bin directory."
-			return res
+			val.errorMessage = "\"yt-dlp.exe\" not found in the bin directory."
 		} else if ffmpegPath == "" {
-			res.errorMessage = "\"ffmpeg.exe\" not found in the bin directory."
-			return res
-		} else {
-			return res
+			val.errorMessage = "\"ffmpeg.exe\" not found in the bin directory."
 		}
+
+		return *val
 	}
 }
 
-type bins_Download_Res struct {
+func (msg *bins_GetPath) onchange(m *Model) (tea.Model, tea.Cmd) {
+	m.states.bins.ffmpeg = msg.ffmpeg
+	m.states.bins.ytdlp = msg.ytdlp
+	if msg.errorMessage != "" {
+		setError(m, "bin_error", msg.errorMessage)
+	} else {
+		clearError(m, "bin_error")
+	}
+	return m, nil
+}
+
+type bins_Download struct {
 	errorMessage string
 }
 
-func bins_Download_Cmd(binary, dir string, progressCh chan tea.Msg) tea.Cmd {
+func (msg *bins_Download) onchange(m *Model) (tea.Model, tea.Cmd) {
+	m.states.downloading_bin = false
+	m.states.progressValue = 0
+	if msg.errorMessage != "" {
+		setError(m, "bin_error", msg.errorMessage)
+		return m, nil
+	}
+	// no error, clear the error message and re-check if any binaries are missing
+	clearError(m, "bin_error")
+	return m, (&bins_GetPath{}).trigger(m.states.dir)
+}
+
+func (val *bins_Download) trigger(binary, dir string, progressCh chan tea.Msg) tea.Cmd {
 	return func() tea.Msg {
 		err := bins.Download(binary, dir, func(downloaded, total int64, percentage float64) {
-			progressCh <- bins_Download_Progress_Res{
+			progressCh <- bins_Download_Progress{
 				percentage: percentage,
 			}
 		})
-		if err == nil {
-			return bins_Download_Res{}
+		if err != nil {
+			val.errorMessage = fmt.Sprintf("Failed to download %s.", binary)
 		}
-		return bins_Download_Res{errorMessage: fmt.Sprintf("Failed to download %s.", binary)}
+		return *val
 	}
 }
 
-type bins_Download_Progress_Res struct {
+type bins_Download_Progress struct {
 	percentage float64
 }
 
-func bins_Download_Progress_Cmd(ch chan tea.Msg) tea.Cmd {
+func (val *bins_Download_Progress) trigger(ch chan tea.Msg) tea.Cmd {
 	return func() tea.Msg {
 		return <-ch
 	}
+}
+
+func (msg *bins_Download_Progress) onchange(m *Model) (tea.Model, tea.Cmd) {
+	if !m.states.downloading_bin {
+		return m, nil
+	}
+	m.states.progressValue = msg.percentage
+	return m, (&bins_Download_Progress{}).trigger(m.progressChannel)
 }
