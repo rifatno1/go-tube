@@ -44,6 +44,8 @@ func hashMatched(dir string, fileContent []byte) bool {
 	return bytes.Equal(oldHash, newHash[:])
 }
 
+// This will return the default settings if the settings file does not exist or if the hash does not match.
+// If the settings file exists and the hash matches, it will return the settings from the file.
 func GetSettings(dir string, defaultSettings Settings) (Settings, error) {
 	settingsPath := filepath.Join(dir, "data", "settings.json")
 

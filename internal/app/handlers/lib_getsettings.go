@@ -10,15 +10,15 @@ import (
 func Trigger_lib_GetSettings(dir string, defaultSettings lib.Settings) tea.Cmd {
 	return func() tea.Msg {
 		settings, err := lib.GetSettings(dir, defaultSettings)
+
+		var errorString string
 		if err != nil {
-			return model.Lib_GetSettings{
-				Settings:    defaultSettings,
-				ErrorString: "Failed to load settings.",
-			}
+			errorString = "Failed to get settings."
 		}
+
 		return model.Lib_GetSettings{
 			Settings:    settings,
-			ErrorString: "",
+			ErrorString: errorString,
 		}
 	}
 }
