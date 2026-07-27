@@ -11,6 +11,6 @@ func clearError(m *model.Model, errorType model.ErrorType) {
 	if errorType == m.ErrorType {
 		m.ErrorMessage = ""
 		m.ErrorType = model.ErrorType_None
+		m.Active_layout = model.Layout_Main
 	}
-	m.Active_layout = model.Layout_Main
 }

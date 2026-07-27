@@ -9,7 +9,8 @@ func (e ErrorType) String() string {
 }
 
 var (
-	ErrorType_RootDirError = ErrorType{value: "root_dir_error"}
-	ErrorType_BinError     = ErrorType{value: "bin_error"}
-	ErrorType_None         = ErrorType{value: ""}
+	ErrorType_RootDirError     = ErrorType{value: "root_dir_error"}
+	ErrorType_BinError         = ErrorType{value: "bin_error"}
+	ErrorType_None             = ErrorType{value: ""}
+	ErrorType_GetSettingsError = ErrorType{value: "get_settings_error"}
 )

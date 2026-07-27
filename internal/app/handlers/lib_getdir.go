@@ -18,13 +18,12 @@ func Trigger_lib_GetDir() tea.Cmd {
 }
 
 func Onchange_lib_GetDir(m *model.Model, msg model.Lib_GetDir) tea.Cmd {
-	m.Dir = msg.Dir
-
 	if msg.ErrorMessage != "" {
 		setError(m, model.ErrorType_RootDirError, msg.ErrorMessage)
 		return nil
 	} else {
+		m.Dir = msg.Dir
 		clearError(m, model.ErrorType_RootDirError)
-		return Trigger_bin_GetPath(m.Dir)
+		return Trigger_lib_GetSettings(m.Dir, m.Settings)
 	}
 }

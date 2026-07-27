@@ -21,6 +21,9 @@ func Update(m *model.Model, msg tea.Msg) tea.Cmd {
 	case model.Lib_GetDir:
 		return handlers.Onchange_lib_GetDir(m, msg)
 
+	case model.Lib_GetSettings:
+		return handlers.Onchange_lib_GetSettings(m, msg)
+
 	case model.Bin_GetPath:
 		return handlers.Onchange_bin_GetPath(m, msg)
 

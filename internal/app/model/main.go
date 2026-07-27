@@ -43,3 +43,8 @@ type Bin_Download struct {
 	ErrorString string
 	Completed   bool
 }
+
+type Lib_GetSettings struct {
+	Settings    lib.Settings
+	ErrorString string
+}
