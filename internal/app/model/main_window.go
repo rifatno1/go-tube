@@ -36,6 +36,8 @@ func GetDefaultMainWindow() main_window {
 	mw.Search.InputField.Cursor.Blink = true
 	mw.Search.InputField.Prompt = " > "
 	if mw.Active_Panel == Active_Panel_Search {
+		// Currently there is a problem. The cursor doesn't blink now initially.
+		// To make the cursor blink, we need to set focus from update and return the event.
 		mw.Search.InputField.Focus() // set focus to the search input field
 	}
 
