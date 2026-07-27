@@ -14,7 +14,6 @@ func Error_BinError(m model.Model, width int) []string {
 	// else show buttons to download or exit
 	if m.Bin_Download.Downloading {
 		m.Bin_Download.ProgressBar.Width = width
-		m.Bin_Download.ProgressBar.ShowPercentage = false
 		strArr = append(strArr, m.Bin_Download.ProgressBar.ViewAs(m.Bin_Download.Percentage))
 	} else {
 		button_1 := lipgloss.NewStyle().Bold(true).Background(m.Theme.Button_BG_main).Padding(0, 1).Render("[Enter] to download")

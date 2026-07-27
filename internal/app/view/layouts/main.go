@@ -7,4 +7,8 @@ import (
 
 func Main(m model.Model, strArr *[]string) {
 	*strArr = append(*strArr, components.Header(m))
+	*strArr = append(
+		*strArr,
+		components.BoxCenter(m, m.Width, Main_Search),
+	)
 }

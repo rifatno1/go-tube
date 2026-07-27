@@ -7,7 +7,6 @@ import (
 	appView "go-tube/internal/app/view"
 	"go-tube/internal/lib"
 
-	"github.com/charmbracelet/bubbles/progress"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -32,7 +31,7 @@ func StartApp() *tea.Program {
 	defaultApp := app{}
 
 	// Downaload progress bar initialization
-	defaultApp.model.Bin_Download.ProgressBar = progress.New(progress.WithDefaultScaledGradient())
+	defaultApp.model.Bin_Download.ProgressBar = appModel.GetDefaultBinDownloadProgressBar()
 
 	// Set the default layout to main layout
 	defaultApp.model.Active_layout = appModel.Layout_Main
@@ -47,6 +46,9 @@ func StartApp() *tea.Program {
 	default:
 		defaultApp.model.Theme = appModel.Theme_Dark
 	}
+
+	// set default main window
+	defaultApp.model.Main_Window = appModel.GetDefaultMainWindow()
 
 	return tea.NewProgram(&defaultApp, tea.WithAltScreen())
 }

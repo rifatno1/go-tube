@@ -23,8 +23,9 @@ type Model struct {
 		ProgressBar     progress.Model
 		ProgressChannel chan Bin_Download
 	}
-	Theme    color
-	Settings lib.Settings
+	Theme       color
+	Settings    lib.Settings
+	Main_Window main_window
 }
 
 type Lib_GetDir struct {
@@ -42,6 +43,13 @@ type Bin_Download struct {
 	Percentage  float64
 	ErrorString string
 	Completed   bool
+}
+
+func GetDefaultBinDownloadProgressBar() progress.Model {
+	return progress.New(
+		progress.WithDefaultScaledGradient(),
+		progress.WithoutPercentage(),
+	)
 }
 
 type Lib_GetSettings struct {

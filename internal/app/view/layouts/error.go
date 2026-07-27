@@ -10,16 +10,18 @@ func Error(m model.Model, strArr *[]string) {
 
 	switch m.ErrorType {
 	case model.ErrorType_BinError:
-		width := 80
-		contents := Error_BinError(m, width)
-		*strArr = append(*strArr, components.BoxCenter(m, width, contents))
+		*strArr = append(
+			*strArr,
+			components.BoxCenter(m, 80, Error_BinError),
+		)
 
 	// model.ErrorType_RootDirError
 	// model.ErrorType_GetSettingsError
 	// model.ErrorType_None
 	default:
-		width := 80
-		contents := Error_General(m, width)
-		*strArr = append(*strArr, components.BoxCenter(m, width, contents))
+		*strArr = append(
+			*strArr,
+			components.BoxCenter(m, 80, Error_General),
+		)
 	}
 }

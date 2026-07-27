@@ -16,19 +16,45 @@ func Update(m *model.Model, msg tea.Msg) tea.Cmd {
 		// return m, tea.ClearScreen
 
 	case tea.KeyMsg:
-		return KeyPress(m, msg)
+		cmd := KeyPress(m, msg)
+		if cmd != nil {
+			return cmd
+		}
 
 	case model.Lib_GetDir:
-		return handlers.Onchange_lib_GetDir(m, msg)
+		cmd := handlers.Onchange_lib_GetDir(m, msg)
+		if cmd != nil {
+			return cmd
+		}
 
 	case model.Lib_GetSettings:
-		return handlers.Onchange_lib_GetSettings(m, msg)
+		cmd := handlers.Onchange_lib_GetSettings(m, msg)
+		if cmd != nil {
+			return cmd
+		}
 
 	case model.Bin_GetPath:
-		return handlers.Onchange_bin_GetPath(m, msg)
+		cmd := handlers.Onchange_bin_GetPath(m, msg)
+		if cmd != nil {
+			return cmd
+		}
 
 	case model.Bin_Download:
-		return handlers.Onchange_bin_download(m, msg)
+		cmd := handlers.Onchange_bin_download(m, msg)
+		if cmd != nil {
+			return cmd
+		}
+	}
+
+	// send other events to the search input field if it's focused
+	if m.Active_layout == model.Layout_Main &&
+		m.Main_Window.Active_Panel == model.Active_Panel_Search &&
+		m.Main_Window.Search.InputField.Focused() {
+		field, cmd := m.Main_Window.Search.InputField.Update(msg)
+		m.Main_Window.Search.InputField = field
+		if cmd != nil {
+			return cmd
+		}
 	}
 
 	return nil
