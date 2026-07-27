@@ -15,7 +15,7 @@ type color struct {
 }
 
 var (
-	LightTheme = color{
+	Theme_Light = color{
 		Text_main:      lipgloss.Color("#1E2030"), // Deep Indigo Ink
 		Text_alt:       lipgloss.Color("#43465E"), // Slate Secondary
 		BG_terminal:    lipgloss.Color("#EEF2FF"), // Light Indigo Ice
@@ -26,7 +26,7 @@ var (
 		Danger_BG_main: lipgloss.Color("#DC2626"), // Crisp Red
 		Danger_BG_alt:  lipgloss.Color("#EF4444"), // Soft Red
 	}
-	DarkTheme = color{
+	Theme_Dark = color{
 		Text_main:      lipgloss.Color("#ECEFF4"), // Soft White
 		Text_alt:       lipgloss.Color("#B48EAD"), // Muted Lavender
 		BG_terminal:    lipgloss.Color("#1B1A23"), // Deep Dark Purple

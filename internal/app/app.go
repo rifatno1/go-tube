@@ -5,6 +5,7 @@ import (
 	appModel "go-tube/internal/app/model"
 	appUpdate "go-tube/internal/app/update"
 	appView "go-tube/internal/app/view"
+	"go-tube/internal/lib"
 
 	"github.com/charmbracelet/bubbles/progress"
 	tea "github.com/charmbracelet/bubbletea"
@@ -36,8 +37,16 @@ func StartApp() *tea.Program {
 	// Set the default layout to main layout
 	defaultApp.model.Active_layout = appModel.Layout_Main
 
+	// set default settings
+	defaultApp.model.Settings = lib.GetDefaultSettings()
+
 	// set default theme
-	defaultApp.model.Theme = appModel.DarkTheme
+	switch defaultApp.model.Settings.Theme {
+	case lib.Theme_Light:
+		defaultApp.model.Theme = appModel.Theme_Light
+	default:
+		defaultApp.model.Theme = appModel.Theme_Dark
+	}
 
 	return tea.NewProgram(&defaultApp, tea.WithAltScreen())
 }

@@ -1,6 +1,8 @@
 package model
 
 import (
+	"go-tube/internal/lib"
+
 	"github.com/charmbracelet/bubbles/progress"
 )
 
@@ -21,17 +23,18 @@ type Model struct {
 		ProgressBar     progress.Model
 		ProgressChannel chan Bin_Download
 	}
-	Theme color
+	Theme    color
+	Settings lib.Settings
+}
+
+type Lib_GetDir struct {
+	Dir          string
+	ErrorMessage string
 }
 
 type Bin_GetPath struct {
 	Ffmpeg       string
 	Ytdlp        string
-	ErrorMessage string
-}
-
-type Lib_GetDir struct {
-	Dir          string
 	ErrorMessage string
 }
 
