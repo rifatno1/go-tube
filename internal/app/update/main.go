@@ -22,28 +22,16 @@ func Update(m *model.Model, msg tea.Msg) tea.Cmd {
 		}
 
 	case model.Lib_GetDir:
-		cmd := handlers.Onchange_lib_GetDir(m, msg)
-		if cmd != nil {
-			return cmd
-		}
+		return handlers.Onchange_lib_GetDir(m, msg)
 
 	case model.Lib_GetSettings:
-		cmd := handlers.Onchange_lib_GetSettings(m, msg)
-		if cmd != nil {
-			return cmd
-		}
+		return handlers.Onchange_lib_GetSettings(m, msg)
 
 	case model.Bin_GetPath:
-		cmd := handlers.Onchange_bin_GetPath(m, msg)
-		if cmd != nil {
-			return cmd
-		}
+		return handlers.Onchange_bin_GetPath(m, msg)
 
 	case model.Bin_Download:
-		cmd := handlers.Onchange_bin_download(m, msg)
-		if cmd != nil {
-			return cmd
-		}
+		return handlers.Onchange_bin_download(m, msg)
 
 	case model.UFV_Main_Window_Search_Width:
 		m.Main_Window.Search.InputField.Width = msg.Value
