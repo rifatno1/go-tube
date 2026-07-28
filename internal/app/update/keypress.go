@@ -18,6 +18,13 @@ func KeyPress(m *model.Model, msg tea.KeyMsg) tea.Cmd {
 		if m.ErrorType == model.ErrorType_BinError {
 			return handlers.Handle_bin_error(m)
 		}
+		if m.Active_layout == model.Layout_Main &&
+			m.Main_Window.Active_Panel == model.Active_Panel_Search &&
+			m.Main_Window.Search.InputField.Focused() {
+			m.Main_Window.Search.Busy = true
+			m.Main_Window.Search.InputField.Blur()
+			return m.Main_Window.Search.Spinner.Tick
+		}
 
 	case "tab":
 		return KeyPress_Tab(m)

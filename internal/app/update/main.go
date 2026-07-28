@@ -44,12 +44,27 @@ func Update(m *model.Model, msg tea.Msg) tea.Cmd {
 
 	// send other events to the search input field if it's focused
 	if m.Active_layout == model.Layout_Main &&
-		m.Main_Window.Active_Panel == model.Active_Panel_Search &&
-		m.Main_Window.Search.InputField.Focused() {
-		field, cmd := m.Main_Window.Search.InputField.Update(msg)
-		m.Main_Window.Search.InputField = field
-		if cmd != nil {
-			return cmd
+		m.Main_Window.Active_Panel == model.Active_Panel_Search {
+		var cmds []tea.Cmd
+		// send events to input field
+		if m.Main_Window.Search.InputField.Focused() {
+			field, cmd := m.Main_Window.Search.InputField.Update(msg)
+			m.Main_Window.Search.InputField = field
+			if cmd != nil {
+				cmds = append(cmds, cmd)
+			}
+		}
+		// send events to spinner
+		if m.Main_Window.Search.Busy {
+			spinner, cmd := m.Main_Window.Search.Spinner.Update(msg)
+			m.Main_Window.Search.Spinner = spinner
+			if cmd != nil {
+				cmds = append(cmds, cmd)
+			}
+		}
+		// return batch of commands if any
+		if len(cmds) > 0 {
+			return tea.Batch(cmds...)
 		}
 	}
 

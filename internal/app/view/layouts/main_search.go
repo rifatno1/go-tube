@@ -11,9 +11,19 @@ func Main_Search(m model.Model, width int) []string {
 	strArr := []string{}
 
 	text_1 := lipgloss.NewStyle().Background(m.Theme.Button_BG_main).Bold(true).Padding(0, 1).Render("Search")
-	text_2 := lipgloss.NewStyle().Bold(true).Padding(0, 1).Render("[Enter]")
+	var text_2 string
+
+	if !m.Main_Window.Search.Busy {
+		text_2 = lipgloss.NewStyle().Bold(true).Padding(0, 1).Render("[Enter]")
+	} else {
+		m.Main_Window.Search.Spinner.Style.Foreground(m.Theme.Text_main)
+		spinner := m.Main_Window.Search.Spinner.View()
+		text_2 = lipgloss.NewStyle().Bold(true).Padding(0, 1).Render("[Searching" + spinner + "]")
+	}
 
 	w := width - lipgloss.Width(text_2) - lipgloss.Width(text_1)
+	// 4 is subtracted here because of the width of cursor (1) and width of prompt (3)
+	// For some reason, these widths are not counted within the specified width when the field value is not empty
 	if m.Main_Window.Search.InputField.Value() != "" {
 		w = w - 4
 	}

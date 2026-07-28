@@ -1,11 +1,16 @@
 package model
 
-import "github.com/charmbracelet/bubbles/textinput"
+import (
+	"github.com/charmbracelet/bubbles/spinner"
+	"github.com/charmbracelet/bubbles/textinput"
+)
 
 type main_window struct {
 	Active_Panel active_panel
 	Search       struct {
 		InputField textinput.Model
+		Spinner    spinner.Model
+		Busy       bool
 	}
 }
 
@@ -39,7 +44,12 @@ func GetDefaultMainWindow() main_window {
 	mw.Search.InputField.Placeholder = "Enter YouTube Video/Playlist URL/ID..."
 	mw.Search.InputField.Cursor.Blink = true
 	mw.Search.InputField.Prompt = " > "
-	if mw.Active_Panel == Active_Panel_Search {
+
+	mw.Search.Spinner = spinner.New()
+	mw.Search.Spinner.Spinner.Frames = []string{".  ", ".. ", "...", " ..", "  .", "   "}
+
+	if mw.Active_Panel == Active_Panel_Search &&
+		!mw.Search.Busy {
 		// Currently there is a problem. The cursor doesn't blink now initially.
 		// To make the cursor blink, we need to set focus from update and return the event.
 		mw.Search.InputField.Focus() // set focus to the search input field

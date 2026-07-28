@@ -21,7 +21,9 @@ func KeyPress_Tab(m *model.Model) tea.Cmd {
 		m.Main_Window.Active_Panel = model.Active_Panel_Playlist
 	case model.Active_Panel_Playlist:
 		m.Main_Window.Active_Panel = model.Active_Panel_Search
-		return m.Main_Window.Search.InputField.Focus() // set focus to the search input field
+		if !m.Main_Window.Search.Busy {
+			return m.Main_Window.Search.InputField.Focus() // set focus to the search input field
+		}
 	}
 
 	return nil
