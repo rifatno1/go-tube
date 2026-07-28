@@ -44,6 +44,14 @@ func Update(m *model.Model, msg tea.Msg) tea.Cmd {
 		if cmd != nil {
 			return cmd
 		}
+
+	case model.UFV_Main_Window_Search_Width:
+		m.Main_Window.Search.InputField.Width = msg.Value
+		return handlers.Listen_UFV(m.UFV)
+
+	case model.UFV_Bin_Download_ProgressBar_Width:
+		m.Bin_Download.ProgressBar.Width = msg.Value
+		return handlers.Listen_UFV(m.UFV)
 	}
 
 	// send other events to the search input field if it's focused

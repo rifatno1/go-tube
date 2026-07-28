@@ -11,6 +11,7 @@ import (
 func KeyPress(m *model.Model, msg tea.KeyMsg) tea.Cmd {
 	switch strings.ToLower(msg.String()) {
 	case "ctrl+c":
+		close(m.UFV)
 		return tea.Quit
 
 	case "enter":

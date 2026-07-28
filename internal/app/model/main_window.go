@@ -24,6 +24,10 @@ var (
 	Active_Panel_Player   = active_panel{value: 3}
 )
 
+type UFV_Main_Window_Search_Width struct {
+	Value int
+}
+
 func GetDefaultMainWindow() main_window {
 	mw := main_window{
 		Active_Panel: Active_Panel_Search,

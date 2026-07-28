@@ -30,7 +30,10 @@ func (m app) Init() tea.Cmd {
 func StartApp() *tea.Program {
 	defaultApp := app{}
 
-	// Downaload progress bar initialization
+	// Initialize Update_From_View channel
+	defaultApp.model.UFV = make(chan tea.Msg, 1)
+
+	// Download progress bar initialization
 	defaultApp.model.Bin_Download.ProgressBar = appModel.GetDefaultBinDownloadProgressBar()
 
 	// Set the default layout to main layout

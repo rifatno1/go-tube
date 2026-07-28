@@ -1,6 +1,7 @@
 package layouts
 
 import (
+	"go-tube/internal/app/handlers"
 	"go-tube/internal/app/model"
 
 	"github.com/charmbracelet/lipgloss"
@@ -13,7 +14,10 @@ func Error_BinError(m model.Model, width int) []string {
 	// show download progress bar if downloading
 	// else show buttons to download or exit
 	if m.Bin_Download.Downloading {
-		m.Bin_Download.ProgressBar.Width = width
+		if m.Bin_Download.ProgressBar.Width != width {
+			m.Bin_Download.ProgressBar.Width = width
+			handlers.Push_UFV(m.UFV, model.UFV_Bin_Download_ProgressBar_Width{Value: width})
+		}
 		strArr = append(strArr, m.Bin_Download.ProgressBar.ViewAs(m.Bin_Download.Percentage))
 	} else {
 		button_1 := lipgloss.NewStyle().Bold(true).Background(m.Theme.Button_BG_main).Padding(0, 1).Render("[Enter] to download")

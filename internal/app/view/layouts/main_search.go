@@ -1,6 +1,7 @@
 package layouts
 
 import (
+	"go-tube/internal/app/handlers"
 	"go-tube/internal/app/model"
 
 	"github.com/charmbracelet/lipgloss"
@@ -13,10 +14,13 @@ func Main_Search(m model.Model, width int) []string {
 	text_2 := lipgloss.NewStyle().Bold(true).Padding(0, 1).Render("[Enter]")
 
 	w := width - lipgloss.Width(text_2) - lipgloss.Width(text_1)
-	if m.Main_Window.Search.InputField.Value() == "" {
+	if m.Main_Window.Search.InputField.Value() != "" {
+		w = w - 4
+	}
+
+	if m.Main_Window.Search.InputField.Width != w {
 		m.Main_Window.Search.InputField.Width = w
-	} else {
-		m.Main_Window.Search.InputField.Width = w - 4
+		handlers.Push_UFV(m.UFV, model.UFV_Main_Window_Search_Width{Value: w})
 	}
 
 	bar := m.Main_Window.Search.InputField.View()
